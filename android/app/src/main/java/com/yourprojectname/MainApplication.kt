@@ -1,4 +1,4 @@
-package com.yourprojectname
+package com.gambler
 
 import android.app.Application
 import com.facebook.react.PackageList
