@@ -9,6 +9,8 @@ import {useAuth} from '../../context/AuthContext';
 import {colors} from '../../styles/colors';
 import {globalStyles} from '../../styles/globalStyles';
 import {dimensions} from '../../styles/dimensions';
+import SpinningWheel from '../../components/SpinningWheel';
+
 
 const DashboardScreen = () => {
   const [selectedNumber, setSelectedNumber] = useState('');
@@ -25,33 +27,39 @@ const DashboardScreen = () => {
       return;
     }
     setIsNumberSelected(true);
-    Alert.alert('Number Selected', `You selected ${number}. Wait for the dice roll!`);
+    Alert.alert(
+      'Number Selected',
+      `You selected ${number}. Wait for the dice roll!`,
+    );
   };
 
   const handleDiceRoll = () => {
     setIsRolling(true);
-    
+
     // Simulate dice roll after 3 seconds
     setTimeout(() => {
       const result = Math.floor(Math.random() * 100) + 1;
       setDiceResult(result);
       setIsRolling(false);
-      
+
       // Check if player won
       if (parseInt(selectedNumber) === result) {
         const winAmount = 500;
         updateBalance(user.balance + winAmount);
         Alert.alert('🎉 Congratulations!', `You won ${winAmount}!`);
       } else {
-        Alert.alert('Try Again', `The dice showed ${result}. Better luck next time!`);
+        Alert.alert(
+          'Try Again',
+          `The dice showed ${result}. Better luck next time!`,
+        );
       }
-      
+
       setLastResult({
         diceNumber: result,
         userNumber: parseInt(selectedNumber),
         won: parseInt(selectedNumber) === result,
       });
-      
+
       // Reset for next round
       setSelectedNumber('');
       setIsNumberSelected(false);
@@ -59,7 +67,9 @@ const DashboardScreen = () => {
   };
 
   return (
-    <LinearGradient colors={colors.gradient.dark} style={globalStyles.container}>
+    <LinearGradient
+      colors={colors.gradient.dark}
+      style={globalStyles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
           <Text style={globalStyles.title}>🎲 Dice Roll Game</Text>
@@ -68,7 +78,8 @@ const DashboardScreen = () => {
 
         <View style={globalStyles.card}>
           <Text style={styles.gameDescription}>
-            Select a number between 1-100. If the dice matches your number, you win $500!
+            Select a number between 1-100. If the dice matches your number, you
+            win $500!
           </Text>
         </View>
 
@@ -81,14 +92,14 @@ const DashboardScreen = () => {
             keyboardType="numeric"
             leftIcon="casino"
           />
-          
+
           <CustomButton
             title="Confirm Number"
             onPress={handleNumberSelect}
             disabled={!selectedNumber || isNumberSelected}
             style={styles.button}
           />
-          
+
           {isNumberSelected && (
             <Text style={styles.selectedText}>
               ✅ Your number: {selectedNumber}
@@ -97,20 +108,22 @@ const DashboardScreen = () => {
         </View>
 
         <View style={globalStyles.card}>
-          <AnimatedDice isRolling={isRolling} result={diceResult} />
-          
+          {/* <AnimatedDice isRolling={isRolling} result={diceResult} /> */}
+          <SpinningWheel />
           <CountdownTimer onComplete={handleDiceRoll} />
-          
+
           {lastResult && (
             <View style={styles.resultContainer}>
               <Text style={styles.resultTitle}>Last Round Result:</Text>
               <Text style={styles.resultText}>
-                Dice: {lastResult.diceNumber} | Your Number: {lastResult.userNumber}
+                Dice: {lastResult.diceNumber} | Your Number:{' '}
+                {lastResult.userNumber}
               </Text>
-              <Text style={[
-                styles.resultStatus,
-                {color: lastResult.won ? colors.success : colors.error}
-              ]}>
+              <Text
+                style={[
+                  styles.resultStatus,
+                  {color: lastResult.won ? colors.success : colors.error},
+                ]}>
                 {lastResult.won ? '🎉 You Won!' : '😔 Try Again'}
               </Text>
             </View>
@@ -119,9 +132,15 @@ const DashboardScreen = () => {
 
         <View style={globalStyles.card}>
           <Text style={styles.howToPlay}>How to Play:</Text>
-          <Text style={styles.instruction}>1. Select a number between 1-100</Text>
-          <Text style={styles.instruction}>2. Wait for the automatic dice roll (every 5 minutes)</Text>
-          <Text style={styles.instruction}>3. Win $500 if your number matches!</Text>
+          <Text style={styles.instruction}>
+            1. Select a number between 1-100
+          </Text>
+          <Text style={styles.instruction}>
+            2. Wait for the automatic dice roll (every 5 minutes)
+          </Text>
+          <Text style={styles.instruction}>
+            3. Win $500 if your number matches!
+          </Text>
         </View>
       </ScrollView>
     </LinearGradient>
