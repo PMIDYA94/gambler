@@ -108,8 +108,8 @@ const DashboardScreen = () => {
         </View>
 
         <View style={globalStyles.card}>
-          {/* <AnimatedDice isRolling={isRolling} result={diceResult} /> */}
-          <SpinningWheel />
+          <AnimatedDice isRolling={isRolling} result={diceResult} />
+          {/* <SpinningWheel /> */}
           <CountdownTimer onComplete={handleDiceRoll} />
 
           {lastResult && (

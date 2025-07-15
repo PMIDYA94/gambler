@@ -16,7 +16,7 @@ const AppNavigator = () => {
     );
   }
 
-  //   return user ? <BottomTabs /> : <AuthNavigator />;
+  // return user ? <BottomTabs /> : <AuthNavigator />;
   return <BottomTabs />;
 };
 

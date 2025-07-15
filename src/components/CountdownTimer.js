@@ -4,7 +4,7 @@ import {colors} from '../styles/colors';
 import {dimensions} from '../styles/dimensions';
 
 const CountdownTimer = ({onComplete}) => {
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(60); // 5 minutes in seconds
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -14,7 +14,7 @@ const CountdownTimer = ({onComplete}) => {
       return () => clearTimeout(timer);
     } else {
       onComplete();
-      setTimeLeft(300); // Reset timer
+      setTimeLeft(60); // Reset timer
     }
   }, [timeLeft, onComplete]);
 
