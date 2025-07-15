@@ -1,4 +1,4 @@
-package com.gambler
+package com.weather
 
 import android.app.Application
 import com.facebook.react.PackageList

@@ -1,74 +1,60 @@
-import React, {useEffect, useRef} from 'react';
-import {View, Text, StyleSheet, Animated} from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-import {colors} from '../styles/colors';
-import {dimensions} from '../styles/dimensions';
-import {globalStyles} from '../styles/globalStyles';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SplashScreen = () => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(0.5)).current;
-
+const SplashScreen = ({ navigation }) => {
   useEffect(() => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 1500,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        tension: 50,
-        friction: 7,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, [fadeAnim, scaleAnim]);
+    const checkLoginStatus = async () => {
+      try {
+        const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
+        setTimeout(() => {
+          if (isLoggedIn === 'true') {
+            navigation.replace('Dashboard');
+          } else {
+            navigation.replace('Login');
+          }
+        }, 2000);
+      } catch (error) {
+        console.error('Error checking login status:', error);
+        setTimeout(() => {
+          navigation.replace('Login');
+        }, 2000);
+      }
+    };
+
+    checkLoginStatus();
+  }, [navigation]);
 
   return (
-    <LinearGradient
-      colors={colors.gradient.dark}
-      style={globalStyles.container}>
-      <View style={styles.content}>
-        <Animated.View
-          style={[
-            styles.logoContainer,
-            {
-              opacity: fadeAnim,
-              transform: [{scale: scaleAnim}],
-            },
-          ]}>
-          <Text style={styles.logo}>🎲</Text>
-          <Text style={styles.title}>Casino Dice</Text>
-          <Text style={styles.subtitle}>Roll Your Luck</Text>
-        </Animated.View>
+    <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Text style={styles.appName}>WeatherApp</Text>
+        <Text style={styles.tagline}>Your Daily Weather Companion</Text>
       </View>
-    </LinearGradient>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  content: {
+  container: {
     flex: 1,
+    backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
   },
   logoContainer: {
     alignItems: 'center',
   },
-  logo: {
-    fontSize: 80,
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: dimensions.fontSize.xxlarge,
+  appName: {
+    fontSize: 32,
     fontWeight: 'bold',
-    color: colors.primary,
+    color: '#2196F3',
     marginBottom: 10,
   },
-  subtitle: {
-    fontSize: dimensions.fontSize.large,
-    color: colors.textSecondary,
+  tagline: {
+    fontSize: 16,
+    color: '#666666',
+    textAlign: 'center',
   },
 });
 
